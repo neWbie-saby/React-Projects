@@ -2,7 +2,7 @@ import React, { useState, Component } from 'react';
 // import Radium, { StyleRoot } from 'radium';
 // import styled from 'styled-components';
 // import logo from './logo.svg';
-import './App.css';
+import classes from './App.css';
 import Person from './Person/Person';
 
 class App extends Component{
@@ -91,6 +91,7 @@ class App extends Component{
     // };
   
     let persons = null;
+    let btnClass = '';
 
     if(this.state.showPeas){
       persons = (
@@ -129,20 +130,21 @@ class App extends Component{
       //   backgroundColor: 'salmon',
       //   color: 'black'
       // }
+      btnClass = classes.Red;
     }
 
-    let clases = [];
+    let assignedClasses = [];
     if(this.state.peas.length <= 2)
-      clases.push('bold');
+      assignedClasses.push(classes.bold);
     if(this.state.peas.length <= 1)
-      clases.push('red');
+      assignedClasses.push(classes.red);
 
     return (
       // <StyleRoot>
-        <div className="App">
+        <div className={classes.App}>
           <h1>It's a React App, chill</h1>
-          <p className={clases.join(' ')}>Don't get too chilly though, and catch a cold</p>
-          <button className="button"
+          <p className={assignedClasses.join(' ')}>Don't get too chilly though, and catch a cold</p>
+          <button className={btnClass}
           // <StyledButton alt={this.state.showPeas}
            onClick={this.togglePersonsHandler}>
             Toggle Persons
