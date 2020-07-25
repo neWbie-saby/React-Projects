@@ -1,4 +1,6 @@
 import React, { useState, Component } from 'react';
+// import Radium, { StyleRoot } from 'radium';
+// import styled from 'styled-components';
 // import logo from './logo.svg';
 import './App.css';
 import Person from './Person/Person';
@@ -75,14 +77,18 @@ class App extends Component{
   }
 
   render(){
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    };
+    // const style = {
+    //   backgroundColor: 'green',
+    //   color: 'white',
+    //   font: 'inherit',
+    //   border: '1px solid blue',
+    //   padding: '8px',
+    //   cursor: 'pointer',
+    //   ':hover': {
+    //     backgroundColor: 'lightgreen',
+    //     color: 'black'
+    //   }
+    // };
   
     let persons = null;
 
@@ -118,31 +124,46 @@ class App extends Component{
           }
         </div>
       );
-      style.backgroundColor = 'red';
+      // style.backgroundColor = 'red';
+      // style[':hover'] = {
+      //   backgroundColor: 'salmon',
+      //   color: 'black'
+      // }
     }
 
+    let clases = [];
+    if(this.state.peas.length <= 2)
+      clases.push('bold');
+    if(this.state.peas.length <= 1)
+      clases.push('red');
+
     return (
-      <div className="App">
-        <h1>It's a React App, chill</h1>
-        <button
-         style={style} onClick={this.togglePersonsHandler}>
-          Toggle Persons
-        </button>
-          {/* <Person
-           name={personState.peas[0].name}
-            age={personState.peas[0].age} />
-          <Person
-           name={personState.peas[1].name}
-            age={personState.peas[1].age}
-            click={switchNameHandler.bind(this, 'Zoey')}
-            changed={nameChangedHandler} >
-              Big Fudge
-          </Person>
-          <Person
-           name={personState.peas[2].name}
-            age={personState.peas[2].age} /> */}
-        {persons}  
-      </div>
+      // <StyleRoot>
+        <div className="App">
+          <h1>It's a React App, chill</h1>
+          <p className={clases.join(' ')}>Don't get too chilly though, and catch a cold</p>
+          <button className="button"
+          // <StyledButton alt={this.state.showPeas}
+           onClick={this.togglePersonsHandler}>
+            Toggle Persons
+          </button>
+          {/* </StyledButton> */}
+            {/* <Person
+            name={personState.peas[0].name}
+              age={personState.peas[0].age} />
+            <Person
+            name={personState.peas[1].name}
+              age={personState.peas[1].age}
+              click={switchNameHandler.bind(this, 'Zoey')}
+              changed={nameChangedHandler} >
+                Big Fudge
+            </Person>
+            <Person
+            name={personState.peas[2].name}
+              age={personState.peas[2].age} /> */}
+          {persons}  
+        </div>
+      // </StyleRoot>
       );
   }
 
@@ -150,5 +171,5 @@ class App extends Component{
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Relax, again a React App'));
 }
 
-// export default app;
 export default App;
+// export default Radium(App);
