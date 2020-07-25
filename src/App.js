@@ -1,25 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import Person from './Person/Person';
 
-const app = props => {
-  const [personState, setPersonState] = useState({
-    peas: [
-      { name: 'Ted', age: 30},
-      { name: 'Marshal', age: 31},
-      { name: 'Lily', age: 31}
-    ]
-  });
+class App extends Component{
 
-  const [otherState, setOtherState] = useState('something More else');
+  state = {
+    peas: [
+      { id: 'sdf21', name: 'Ted', age: 30},
+      { id: 'dsfg23', name: 'Marshal', age: 31},
+      { id: 'edf54', name: 'Lily', age: 31}
+    ],
+    showPeas: false
+  }
+
+// const app = props => {
+//   const [personState, setPersonState] = useState({
+//     peas: [
+//       { name: 'Ted', age: 30},
+//       { name: 'Marshal', age: 31},
+//       { name: 'Lily', age: 31}
+//     ]
+//   });
+
+//   const [otherState, setOtherState] = useState('something More else');
 
   // console.log(personState, otherState);
 
-  const switchNameHandler = (newName) => {
-    // console.log('Clicked!')
+  switchNameHandler = (newName) => {
     // this.state.peas[0].name = "Tracy"; // DOESN'T WORK
-    setPersonState({ 
+    this.setState({ 
       peas : [
         { name: newName, age: 28 },
         { name: 'Marshal', age: 31},
@@ -28,48 +38,117 @@ const app = props => {
     })
   }
 
-  const nameChangedHandler = (event) => {
-    setPersonState({ 
-      peas : [
-        { name: 'Ted', age: 20 },
-        { name: event.target.value, age: 31},
-        { name: 'Lily', age: 31}
-      ]
+  nameChangedHandler = (event, id) => {
+    const pIndex = this.state.peas.findIndex(p => {
+      return p.id === id;
     })
+
+    // const onePerson = Object.assign({}, this.state.peas[pIndex]);
+    const onePerson = {...this.state.peas[pIndex]};
+
+    onePerson.name = event.target.value;
+
+    const persons = [...this.state.peas];
+    persons[pIndex] = onePerson;
+
+    this.setState({peas: persons});
+
+    // this.setState({ 
+    //   peas : [
+    //     { name: 'Ted', age: 20 },
+    //     { name: event.target.value, age: 31},
+    //     { name: 'Lily', age: 31}
+    //   ]
+    // })
   }
 
-  const style = {
-    backgroundColor: 'white',
-    font: 'inherit',
-    border: '1px solid blue',
-    padding: '8px',
-    cursor: 'pointer'
-  };
+  togglePersonsHandler = () => {
+    const d = this.state.showPeas;
+    this.setState({ showPeas: !d });
+  }
+
+  deletePersonHandler = (pIndex) => {
+    // const persons = this.state.peas.slice();
+    const persons = [...this.state.peas];
+    persons.splice(pIndex, 1);
+    this.setState({peas: persons});
+  }
+
+  render(){
+    const style = {
+      backgroundColor: 'green',
+      color: 'white',
+      font: 'inherit',
+      border: '1px solid blue',
+      padding: '8px',
+      cursor: 'pointer'
+    };
+  
+    let persons = null;
+
+    if(this.state.showPeas){
+      persons = (
+        <div>
+          {
+            this.state.peas.map((p, index) => {
+              return (
+                <Person click={() => this.deletePersonHandler(index)}
+                 name={p.name}
+                 age={p.age}
+                 key={p.id}
+                 changed={(event) => this.nameChangedHandler(event, p.id)} />
+              );
+            })
+          /* <Person
+           name={this.state.peas[0].name}
+           age={this.state.peas[0].age}
+           // onClick={() => switchNameHandler('Tracy')}
+           click={() => this.switchNameHandler('Tracy')} />
+          <Person
+           name={this.state.peas[1].name}
+           age={this.state.peas[1].age}
+           // click={switchNameHandler.bind(this, 'Zoey')}
+           click={this.switchNameHandler.bind(this, 'Zoey')}
+           changed={this.nameChangedHandler} >
+            Big Fudge
+          </Person>
+          <Person
+           name={this.state.peas[2].name}
+           age={this.state.peas[2].age} /> */
+          }
+        </div>
+      );
+      style.backgroundColor = 'red';
+    }
 
     return (
       <div className="App">
         <h1>It's a React App, chill</h1>
         <button
-         style={style}
-         onClick={() => switchNameHandler('Tracy')}>
-          Switch Names
+         style={style} onClick={this.togglePersonsHandler}>
+          Toggle Persons
         </button>
-        <Person
-         name={personState.peas[0].name}
-          age={personState.peas[0].age} />
-        <Person
-         name={personState.peas[1].name}
-          age={personState.peas[1].age}
-          click={switchNameHandler.bind(this, 'Zoey')}
-          changed={nameChangedHandler} >
-            Big Fudge
-        </Person>
-        <Person
-         name={personState.peas[2].name}
-          age={personState.peas[2].age} />
+          {/* <Person
+           name={personState.peas[0].name}
+            age={personState.peas[0].age} />
+          <Person
+           name={personState.peas[1].name}
+            age={personState.peas[1].age}
+            click={switchNameHandler.bind(this, 'Zoey')}
+            changed={nameChangedHandler} >
+              Big Fudge
+          </Person>
+          <Person
+           name={personState.peas[2].name}
+            age={personState.peas[2].age} /> */}
+        {persons}  
       </div>
-    );
+      );
+  }
+
+  
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Relax, again a React App'));
 }
 
-export default app;
+// export default app;
+export default App;
