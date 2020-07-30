@@ -3,7 +3,9 @@ import React, { useState, Component } from 'react';
 // import styled from 'styled-components';
 // import logo from './logo.svg';
 import classes from './App.css';
-import Person from './Person/Person';
+import Driver from '../components/Driver/Driver';
+import Persons from '../components/PersonList/PersonList';
+import ErrBoundary from '../components/ErrBoundary/ErrBoundary';
 
 class App extends Component{
 
@@ -13,7 +15,8 @@ class App extends Component{
       { id: 'dsfg23', name: 'Marshal', age: 31},
       { id: 'edf54', name: 'Lily', age: 31}
     ],
-    showPeas: false
+    showPeas: false,
+    keysCounter: 0
   }
 
 // const app = props => {
@@ -53,7 +56,12 @@ class App extends Component{
     const persons = [...this.state.peas];
     persons[pIndex] = onePerson;
 
-    this.setState({peas: persons});
+    this.setState((oldState, props) => {
+      return {
+        peas: persons,
+        keysCounter: oldState.keysCounter + 1
+      };
+    });
 
     // this.setState({ 
     //   peas : [
@@ -91,26 +99,15 @@ class App extends Component{
     // };
   
     let persons = null;
-    let btnClass = '';
 
     if(this.state.showPeas){
-      persons = (
-        <div>
-          {
-            this.state.peas.map((p, index) => {
-              return (
-                <Person click={() => this.deletePersonHandler(index)}
-                 name={p.name}
-                 age={p.age}
-                 key={p.id}
-                 changed={(event) => this.nameChangedHandler(event, p.id)} />
-              );
-            })
-          /* <Person
-           name={this.state.peas[0].name}
-           age={this.state.peas[0].age}
-           // onClick={() => switchNameHandler('Tracy')}
-           click={() => this.switchNameHandler('Tracy')} />
+      persons = <Persons
+             people={this.state.peas}
+             clicked={this.deletePersonHandler}
+             changed={this.nameChangedHandler}
+            />
+            
+          /* 
           <Person
            name={this.state.peas[1].name}
            age={this.state.peas[1].age}
@@ -119,40 +116,25 @@ class App extends Component{
            changed={this.nameChangedHandler} >
             Big Fudge
           </Person>
-          <Person
-           name={this.state.peas[2].name}
-           age={this.state.peas[2].age} /> */
-          }
-        </div>
-      );
-      // style.backgroundColor = 'red';
-      // style[':hover'] = {
-      //   backgroundColor: 'salmon',
-      //   color: 'black'
-      // }
-      btnClass = classes.Red;
+          */
+          
+          // style.backgroundColor = 'red';
+          // style[':hover'] = {
+          //   backgroundColor: 'salmon',
+          //   color: 'black'
+          // }
     }
-
-    let assignedClasses = [];
-    if(this.state.peas.length <= 2)
-      assignedClasses.push(classes.bold);
-    if(this.state.peas.length <= 1)
-      assignedClasses.push(classes.red);
 
     return (
       // <StyleRoot>
         <div className={classes.App}>
-          <h1>It's a React App, chill</h1>
-          <p className={assignedClasses.join(' ')}>Don't get too chilly though, and catch a cold</p>
-          <button className={btnClass}
-          // <StyledButton alt={this.state.showPeas}
-           onClick={this.togglePersonsHandler}>
-            Toggle Persons
-          </button>
+          <Driver
+           title={this.props.appTitle}
+           showPeas={this.state.showPeas}
+           peas={this.state.peas}
+           clicked={this.togglePersonsHandler}/>
           {/* </StyledButton> */}
-            {/* <Person
-            name={personState.peas[0].name}
-              age={personState.peas[0].age} />
+            {/*
             <Person
             name={personState.peas[1].name}
               age={personState.peas[1].age}
@@ -160,9 +142,7 @@ class App extends Component{
               changed={nameChangedHandler} >
                 Big Fudge
             </Person>
-            <Person
-            name={personState.peas[2].name}
-              age={personState.peas[2].age} /> */}
+            */}
           {persons}  
         </div>
       // </StyleRoot>
