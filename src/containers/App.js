@@ -6,6 +6,7 @@ import classes from './App.css';
 import Driver from '../components/Driver/Driver';
 import Persons from '../components/PersonList/PersonList';
 import ErrBoundary from '../components/ErrBoundary/ErrBoundary';
+import AuthContext from '../context/auth-context';
 
 class App extends Component{
 
@@ -16,7 +17,8 @@ class App extends Component{
       { id: 'edf54', name: 'Lily', age: 31}
     ],
     showPeas: false,
-    keysCounter: 0
+    keysCounter: 0,
+    authenticated: false
   }
 
 // const app = props => {
@@ -84,6 +86,10 @@ class App extends Component{
     this.setState({peas: persons});
   }
 
+  loginHandler = () => {
+    this.setState({authenticated: true});
+  };
+
   render(){
     // const style = {
     //   backgroundColor: 'green',
@@ -127,23 +133,31 @@ class App extends Component{
 
     return (
       // <StyleRoot>
+      
         <div className={classes.App}>
-          <Driver
-           title={this.props.appTitle}
-           showPeas={this.state.showPeas}
-           peas={this.state.peas}
-           clicked={this.togglePersonsHandler}/>
-          {/* </StyledButton> */}
-            {/*
-            <Person
-            name={personState.peas[1].name}
-              age={personState.peas[1].age}
-              click={switchNameHandler.bind(this, 'Zoey')}
-              changed={nameChangedHandler} >
-                Big Fudge
-            </Person>
-            */}
-          {persons}  
+          <AuthContext.Provider
+           value={{
+              authenticated: this.state.authenticated,
+              login: this.loginHandler
+           }}
+          >
+            <Driver
+            title={this.props.appTitle}
+            showPeas={this.state.showPeas}
+            peas={this.state.peas}
+            clicked={this.togglePersonsHandler}/>
+            {/* </StyledButton> */}
+              {/*
+              <Person
+              name={personState.peas[1].name}
+                age={personState.peas[1].age}
+                click={switchNameHandler.bind(this, 'Zoey')}
+                changed={nameChangedHandler} >
+                  Big Fudge
+              </Person>
+              */}
+            {persons}
+          </AuthContext.Provider>  
         </div>
       // </StyleRoot>
       );

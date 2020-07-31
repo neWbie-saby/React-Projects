@@ -1,9 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 
 import classes from './Driver.css';
+import AuthContext from '../../context/auth-context';
 
 const driver = (props) => {
     const toggleRef = useRef(null);
+
+    const authContext = useContext(AuthContext);
+    // console.log(authContext.authenticated);
 
     useEffect(() => {
         console.log("[Driver.js] useEffect");
@@ -43,6 +47,7 @@ const driver = (props) => {
              onClick={props.clicked}>
                 Toggle Persons
             </button>
+            <button onClick={authContext.login}>Log In</button>
         </div>
     );
 }
